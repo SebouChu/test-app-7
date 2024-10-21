@@ -3,7 +3,7 @@ class FollowersNotificationJob < ApplicationJob
 
   def perform(post)
     puts "============================================="
-    puts "@followers Hey! Post ##{id} has been updated!"
+    puts "@followers Hey! Post ##{post.id} has been updated!"
     puts "============================================="
   end
 end
