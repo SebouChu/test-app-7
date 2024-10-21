@@ -11,6 +11,8 @@ gem "image_processing", "~> 1.2"
 gem "bootstrap", "~> 5.3"
 gem "sassc-rails", "~> 2.1"
 gem "activestorage-scaleway-service", "~> 1.1"
+gem "simple_form", "~> 5.3"
+gem "good_job", "~> 4.4"
 
 group :development, :test do
   gem "byebug"
@@ -25,5 +27,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "simple_form", "~> 5.3"
