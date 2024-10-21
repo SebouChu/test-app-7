@@ -14,10 +14,6 @@ class Post < ApplicationRecord
   end
 
   def send_notification_to_followers
-    if notify_followers == "1"
-      puts "============================================="
-      puts "@followers Hey! Post ##{id} has been updated!"
-      puts "============================================="
-    end
+    FollowersNotificationJob.perform_later(self) if notify_followers == "1"
   end
 end
