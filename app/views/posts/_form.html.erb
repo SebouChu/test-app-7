@@ -6,7 +6,8 @@
     <%= f.input :title %>
     <%= f.input :body %>
     <%= f.input :picture %>
-    <%= f.input :picture_delete %>
+    <%= f.input :picture_delete, as: :boolean %>
+    <%= f.input :notify_followers, as: :boolean %>
   </div>
 
   <div class="form-actions">
