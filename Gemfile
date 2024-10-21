@@ -10,9 +10,11 @@ gem "ostruct", "~> 0.6.0"
 gem "image_processing", "~> 1.2"
 gem "bootstrap", "~> 5.3"
 gem "sassc-rails", "~> 2.1"
+gem "activestorage-scaleway-service", "~> 1.1"
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "byebug"
+  gem "dotenv-rails", "~> 3.1"
 end
 
 group :development do
@@ -23,3 +25,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "simple_form", "~> 5.3"

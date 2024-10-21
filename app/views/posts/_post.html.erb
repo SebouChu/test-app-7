@@ -1,4 +1,8 @@
 <div id="<%= dom_id post %>">
+  <% if post.picture.attached? && post.picture.representable? %>
+    <%= image_tag post.picture.variant(resize_to_limit: [300, 200]) %>
+  <% end %>
+
   <p>
     <strong>Title:</strong>
     <%= post.title %>
