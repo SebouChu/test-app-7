@@ -1,6 +1,8 @@
 require "test_helper"
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
   setup do
     @post = posts(:one)
   end
@@ -17,7 +19,10 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create post" do
     assert_difference("Post.count") do
-      post posts_url, params: { post: { body: @post.body, title: @post.title } }
+      post posts_url, params: { post: {
+        title: "My second post",
+        body: "This is my second post!"
+      } }
     end
 
     assert_redirected_to post_url(Post.last)
@@ -34,7 +39,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update post" do
-    patch post_url(@post), params: { post: { body: @post.body, title: @post.title } }
+    patch post_url(@post), params: { post: {
+      body: "My first post is awesome!"
+    } }
     assert_redirected_to post_url(@post)
   end
 
