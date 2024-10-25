@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateGoodJobs < ActiveRecord::Migration[7.2]
+class CreateGoodJobs < ActiveRecord::Migration[7.1]
   def change
     # Uncomment for Postgres v12 or earlier to enable gen_random_uuid() support
     # enable_extension 'pgcrypto'
