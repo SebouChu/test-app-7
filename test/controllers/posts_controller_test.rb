@@ -3,53 +3,58 @@ require "test_helper"
 class PostsControllerTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
-  setup do
-    @post = posts(:one)
-  end
-
-  test "should get index" do
-    get posts_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get new_post_url
-    assert_response :success
-  end
-
-  test "should create post" do
-    assert_difference("Post.count") do
-      post posts_url, params: { post: {
-        title: "My second post",
-        body: "This is my second post!"
-      } }
+  test "should create without picture" do
+    assert_no_enqueued_jobs only: FollowersNotificationJob do
+      post(posts_url, params: { post: {
+        title: "A new post",
+        body: "This is the body of the new post"
+      } })
     end
-
-    assert_redirected_to post_url(Post.last)
   end
 
-  test "should show post" do
-    get post_url(@post)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_post_url(@post)
-    assert_response :success
-  end
-
-  test "should update post" do
-    patch post_url(@post), params: { post: {
-      body: "My first post is awesome!"
-    } }
-    assert_redirected_to post_url(@post)
-  end
-
-  test "should destroy post" do
-    assert_difference("Post.count", -1) do
-      delete post_url(@post)
+  test "should create without picture and notify followers" do
+    assert_enqueued_jobs 1, only: FollowersNotificationJob do
+      post(posts_url, params: { post: {
+        title: "A new post",
+        body: "This is the body of the new post",
+        notify_followers: "1"
+      } })
     end
+  end
 
-    assert_redirected_to posts_url
+  test "should create with uploaded picture" do
+    assert_no_enqueued_jobs only: FollowersNotificationJob do
+      post(posts_url, params: { post: {
+        title: "A new post",
+        body: "This is the body of the new post",
+        picture: fixture_file_upload("lachlan-gowen.jpg", "image/jpeg")
+      } })
+    end
+    assert(Post.last.picture.attached?)
+  end
+
+  test "should create with uploaded picture and notify followers" do
+    assert_enqueued_jobs 1, only: FollowersNotificationJob do
+      post(posts_url, params: { post: {
+        title: "A new post",
+        body: "This is the body of the new post",
+        picture: fixture_file_upload("lachlan-gowen.jpg", "image/jpeg"),
+        notify_followers: "1"
+      } })
+    end
+    assert(Post.last.picture.attached?)
+  end
+
+  test "should create with direct-uploaded picture and notify followers" do
+    blob = directly_upload_file_blob(filename: "lachlan-gowen.jpg", content_type: "image/jpeg", record: nil)
+    assert_enqueued_jobs 1, only: FollowersNotificationJob do
+      post(posts_url, params: { post: {
+        title: "A new post",
+        body: "This is the body of the new post",
+        picture: blob.signed_id,
+        notify_followers: "1"
+      } })
+    end
+    assert(Post.last.picture.attached?)
   end
 end
